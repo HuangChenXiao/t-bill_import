@@ -12,8 +12,8 @@ namespace DataImport
         #region Model
         //主表字段
         public int id { get; set; }//id
-        public string code { get; set; }//单据编号
         public decimal retailprice { get; set; }//零售价
+        public string code { get; set; }//单据编号
         public string ccusname { get; set; }//客户名称
         public string linkman { get; set; }//联系人
         public string address { get; set; }//收货地址

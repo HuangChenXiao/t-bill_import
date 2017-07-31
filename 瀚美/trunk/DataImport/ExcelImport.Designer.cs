@@ -72,8 +72,8 @@
             // 刷新ToolStripMenuItem
             // 
             this.刷新ToolStripMenuItem.Name = "刷新ToolStripMenuItem";
-            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.刷新ToolStripMenuItem.Text = "刷新";
+            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.刷新ToolStripMenuItem.Text = "清空数据";
             this.刷新ToolStripMenuItem.Click += new System.EventHandler(this.刷新ToolStripMenuItem_Click);
             // 
             // dgvImport

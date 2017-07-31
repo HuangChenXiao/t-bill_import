@@ -21,7 +21,7 @@ namespace DataImport
         {
             InitializeComponent();
             iEntity = entity;
-            str = string.Format("server={0};database={1};uid={2};pwd={3}", entity.Server, entity.Database, entity.Uid, entity.Pwd,entity.AddUser);
+            str = string.Format("server={0};database={1};uid={2};pwd={3}", entity.Server, entity.Database, entity.Uid, entity.Pwd, entity.AddUser);
             sqlconn = new SqlConnection(str.ToString());
         }
 
@@ -66,7 +66,7 @@ namespace DataImport
                 //表头
                 dto.priuserdefnvc1 = dt.Rows[i]["销售属性"].ToString();
                 dto.priuserdefnvc2 = dt.Rows[i]["物流公司运单号"].ToString();
-                dto.code = "";
+                dto.code = dt.Rows[i]["单据号"].ToString();
                 dto.ccusname = dt.Rows[i]["买家昵称"].ToString();
                 dto.linkman = dt.Rows[i]["收货人姓名"].ToString();
                 dto.address = dt.Rows[i]["收货人详细地址"].ToString();
@@ -75,7 +75,7 @@ namespace DataImport
                 dto.priuserdefnvc3 = dt.Rows[i]["卖家备注"].ToString();
                 dto.saleInvoiceNo = dt.Rows[i]["发票"].ToString();
                 //表体
-                dto.inventoryname= dt.Rows[i]["商品名称"].ToString();
+                dto.inventoryname = dt.Rows[i]["商品名称"].ToString();
                 dto.idinventory = dt.Rows[i]["商品编码"].ToString();
                 dto.quantity = dt.Rows[i]["数量"].ToDecimalIfNull();
                 dto.priuserdefdecm1 = dt.Rows[i]["运费"].ToDecimalIfNull();
@@ -87,7 +87,6 @@ namespace DataImport
             {
                 sqlconn.Open();
             }
-
             foreach (HM_DataImportInfo item in dtoList)
             {
                 sqlText += string.Format(@"INSERT INTO [HM_DataImportInfo]
@@ -109,7 +108,6 @@ namespace DataImport
                 MessageBox.Show(ex.Message);
                 tran.Rollback();
             }
-
             Refreshdgv();
             sqlconn.Close();
             conn.Close();
@@ -160,7 +158,7 @@ namespace DataImport
             //        //dto.quantity = ds.Tables[0].Rows[i]["quantity"].ToDecimalIfNull();
             //        //dto.priuserdefdecm1 = ds.Tables[0].Rows[i]["priuserdefdecm1"].ToDecimalIfNull();
             //        //dto.taxamount = ds.Tables[0].Rows[i]["taxamount"].ToDecimalIfNull();
-                    
+
             //        dtoList.Add(dto);
             //    }
             //}
@@ -170,6 +168,7 @@ namespace DataImport
 
         private void 刷新ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            truncateTable();
             Refreshdgv();
         }
 
@@ -184,7 +183,7 @@ namespace DataImport
             string TextMsg = "";
             int succeed = 0;
             int defeated = 0;
-            sql = "select id from HM_DataImportInfo";
+            sql = "select distinct code from HM_DataImportInfo";
             cmd = new SqlCommand(sql, sqlconn);
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -197,11 +196,10 @@ namespace DataImport
                 SqlParameter[] parms = 
             {
                 new SqlParameter("@ResultStr",SqlDbType.NVarChar, 300),
-                new SqlParameter("@id",SqlDbType.Int, 50),
+                new SqlParameter("@code",SqlDbType.NVarChar, 50),
             };
                 parms[0].Direction = ParameterDirection.Output;
-                parms[1].Value = item["id"];
-
+                parms[1].Value = item["code"];
 
                 SqlCommand sqlcomm = new SqlCommand("Sync_SA_SaleDelivery", sqlconn);
                 sqlcomm.CommandType = CommandType.StoredProcedure;
@@ -218,12 +216,15 @@ namespace DataImport
                 else
                 {
                     defeated++;
+                    TextMsg += msg + "\r\n";
                 }
             }
             MessageBox.Show("成功：" + succeed + "次，失败：" + defeated + "次\r\n" + TextMsg);
-
-            truncateTable();
-            Refreshdgv();
+            if (defeated == 0)
+            {
+                truncateTable();
+                Refreshdgv();
+            }
         }
         /// <summary>
         /// 生成存货档案
@@ -266,7 +267,7 @@ namespace DataImport
             //设置显示的列名
             dgvImport.Columns[0].Visible = false;
             dgvImport.Columns[1].Visible = false;
-            dgvImport.Columns[2].Visible = false;
+            dgvImport.Columns["code"].HeaderText = "单据号";
             dgvImport.Columns["ccusname"].HeaderText = "买家昵称";
             dgvImport.Columns["linkman"].HeaderText = "收货人姓名";
             dgvImport.Columns["address"].HeaderText = "收货人详细地址";
