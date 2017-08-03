@@ -14,6 +14,7 @@ namespace DataImport
         public int id { get; set; }//id
         public decimal retailprice { get; set; }//零售价
         public string code { get; set; }//单据编号
+        public string warehouse { get; set; }//仓库
         public string ccusname { get; set; }//客户名称
         public string linkman { get; set; }//联系人
         public string address { get; set; }//收货地址

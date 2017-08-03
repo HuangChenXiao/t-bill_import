@@ -39,13 +39,13 @@ namespace DataImport
             LoginWin login = new LoginWin();
             this.Close();
         }
-
+        string path = Environment.CurrentDirectory + @"\\Programmers.dat";
         private void LoginWin_Load(object sender, EventArgs e)
         {
-            if (File.Exists(@"c:\Programmers.dat"))
+            if (File.Exists(path))
             {
                 //c#文件流读文件 
-                using (FileStream fsRead = new FileStream(@"c:\Programmers.dat", FileMode.Open))
+                using (FileStream fsRead = new FileStream(path, FileMode.Open))
                 {
                     BinaryFormatter binFormat = new BinaryFormatter();//创建二进制序列化器
 
@@ -73,13 +73,11 @@ namespace DataImport
 
             list = new List<ImportEntity>();
 
-            list.Add(new ImportEntity { Server = this.Servertbx.Text.Trim(), Database = this.Databasetbx.Text.Trim(), Uid = this.Uidtbx.Text.Trim(), Pwd = this.Pwdtbx.Text.Trim(),AddUser=this.Addusertxt.Text.ToStringIfNull().Trim() });
+            list.Add(new ImportEntity { Server = this.Servertbx.Text.Trim(), Database = this.Databasetbx.Text.Trim(), Uid = this.Uidtbx.Text.Trim(), Pwd = this.Pwdtbx.Text.Trim(), AddUser = this.Addusertxt.Text.ToStringIfNull().Trim() });
 
             //使用二进制序列化对象
 
-            string fileName = @"c:\Programmers.dat";//文件名称与路径
-
-            Stream fStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
+            Stream fStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
 
             BinaryFormatter binFormat = new BinaryFormatter();//创建二进制序列化器
 

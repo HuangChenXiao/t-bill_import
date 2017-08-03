@@ -67,6 +67,7 @@ namespace DataImport
                 dto.priuserdefnvc1 = dt.Rows[i]["销售属性"].ToString();
                 dto.priuserdefnvc2 = dt.Rows[i]["物流公司运单号"].ToString();
                 dto.code = dt.Rows[i]["单据号"].ToString();
+                dto.warehouse = dt.Rows[i]["仓库"].ToString();
                 dto.ccusname = dt.Rows[i]["买家昵称"].ToString();
                 dto.linkman = dt.Rows[i]["收货人姓名"].ToString();
                 dto.address = dt.Rows[i]["收货人详细地址"].ToString();
@@ -90,10 +91,10 @@ namespace DataImport
             foreach (HM_DataImportInfo item in dtoList)
             {
                 sqlText += string.Format(@"INSERT INTO [HM_DataImportInfo]
-               (code,ccusname,linkman, address,contactphone, priuserdefnvc1, priuserdefnvc2, saleInvoiceNo, memo,idinventory,inventoryname,retailprice, quantity, priuserdefdecm1, taxamount,maker,priuserdefnvc3)
+               (code,ccusname,linkman, address,contactphone, priuserdefnvc1, priuserdefnvc2, saleInvoiceNo, memo,idinventory,inventoryname,retailprice, quantity, priuserdefdecm1, taxamount,maker,priuserdefnvc3,warehouse)
                VALUES
-               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}')",
-               item.code, item.ccusname, item.linkman, item.address, item.contactphone, item.priuserdefnvc1, item.priuserdefnvc2, item.saleInvoiceNo, item.memo, item.idinventory, item.inventoryname, item.retailprice, item.quantity, item.priuserdefdecm1, item.taxamount, iEntity.AddUser, item.priuserdefnvc3);
+               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}')",
+               item.code, item.ccusname, item.linkman, item.address, item.contactphone, item.priuserdefnvc1, item.priuserdefnvc2, item.saleInvoiceNo, item.memo, item.idinventory, item.inventoryname, item.retailprice, item.quantity, item.priuserdefdecm1, item.taxamount, iEntity.AddUser, item.priuserdefnvc3, item.warehouse);
             }
             OleDbTransaction tran = conn.BeginTransaction();
             try
@@ -205,10 +206,11 @@ namespace DataImport
                 sqlcomm.CommandType = CommandType.StoredProcedure;
                 sqlcomm.Parameters.AddRange(parms);
                 sqlcomm.ExecuteReader();
-                string msg = "";
-                msg = (String)parms[0].Value;
                 if (sqlconn.State != ConnectionState.Closed)
+                {
                     sqlconn.Close();
+                }
+                string msg = (String)parms[0].Value;
                 if (msg.Contains("同步成功"))
                 {
                     succeed++;
@@ -268,6 +270,7 @@ namespace DataImport
             dgvImport.Columns[0].Visible = false;
             dgvImport.Columns[1].Visible = false;
             dgvImport.Columns["code"].HeaderText = "单据号";
+            dgvImport.Columns["warehouse"].HeaderText = "仓库";
             dgvImport.Columns["ccusname"].HeaderText = "买家昵称";
             dgvImport.Columns["linkman"].HeaderText = "收货人姓名";
             dgvImport.Columns["address"].HeaderText = "收货人详细地址";

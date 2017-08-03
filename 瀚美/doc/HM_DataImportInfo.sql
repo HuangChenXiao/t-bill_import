@@ -1,6 +1,5 @@
 
-
-/****** Object:  Table [dbo].[HM_DataImportInfo]    Script Date: 07/29/2017 16:26:19 ******/
+/****** Object:  Table [dbo].[HM_DataImportInfo]    Script Date: 08/03/2017 09:39:24 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10,6 +9,7 @@ GO
 CREATE TABLE [dbo].[HM_DataImportInfo](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[code] [nvarchar](500) NULL,
+	[warehouse] [nvarchar](500) NULL,
 	[ccusname] [nvarchar](500) NULL,
 	[linkman ] [nvarchar](500) NULL,
 	[address] [nvarchar](500) NULL,
