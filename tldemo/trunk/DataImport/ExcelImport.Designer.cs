@@ -31,6 +31,9 @@
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("采购订单");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("采购管理", new System.Windows.Forms.TreeNode[] {
             treeNode1});
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("报表");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("报表管理", new System.Windows.Forms.TreeNode[] {
+            treeNode3});
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -53,28 +56,28 @@
             this.刷新ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(893, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(893, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // excel导入ToolStripMenuItem
             // 
             this.excel导入ToolStripMenuItem.Name = "excel导入ToolStripMenuItem";
-            this.excel导入ToolStripMenuItem.Size = new System.Drawing.Size(73, 21);
+            this.excel导入ToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.excel导入ToolStripMenuItem.Text = "Excel导入";
             this.excel导入ToolStripMenuItem.Click += new System.EventHandler(this.excel导入ToolStripMenuItem_Click);
             // 
             // 同步ToolStripMenuItem
             // 
             this.同步ToolStripMenuItem.Name = "同步ToolStripMenuItem";
-            this.同步ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.同步ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.同步ToolStripMenuItem.Text = "同步";
             this.同步ToolStripMenuItem.Click += new System.EventHandler(this.同步ToolStripMenuItem_Click);
             // 
             // 刷新ToolStripMenuItem
             // 
             this.刷新ToolStripMenuItem.Name = "刷新ToolStripMenuItem";
-            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.刷新ToolStripMenuItem.Text = "清空数据";
             this.刷新ToolStripMenuItem.Click += new System.EventHandler(this.刷新ToolStripMenuItem_Click);
             // 
@@ -82,13 +85,17 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(0, 27);
             this.treeView1.Name = "treeView1";
-            treeNode1.Checked = true;
             treeNode1.Name = "pu_order";
             treeNode1.Text = "采购订单";
             treeNode2.Name = "pu";
             treeNode2.Text = "采购管理";
+            treeNode3.Name = "aa__report";
+            treeNode3.Text = "报表";
+            treeNode4.Name = "aa";
+            treeNode4.Text = "报表管理";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode2,
+            treeNode4});
             this.treeView1.Size = new System.Drawing.Size(133, 441);
             this.treeView1.TabIndex = 4;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);

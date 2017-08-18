@@ -60,10 +60,16 @@ namespace DataImport
             myCommand = new OleDbDataAdapter(strExcel, connStr);
             dt = new DataTable();
             myCommand.Fill(dt);
-
-            string name = this.treeView1.SelectedNode.Name;//节点名称 pu_order.采购订单
-            if (name == "pu_order")
-            {  
+            if (this.treeView1.SelectedNode==null)
+            {
+                MessageBox.Show("请选择对应的导入模块！");
+                return;
+            }
+            clear_dgv();
+            truncateTable();
+            string tree_name = this.treeView1.SelectedNode.Name;//节点名称 pu_order.采购订单
+            if (tree_name == "pu_order")
+            {
                 //采购订单
                 pu_order = new List<Sync_Table_PurchaseOrder>();
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -93,15 +99,17 @@ namespace DataImport
                     pu_order.Add(dto);
                 }
                 CreateInventory();//不存在存货则添加
-                truncateTable(name);//truncate
+                truncateTable();//truncate
+                sqlText = "";
                 foreach (Sync_Table_PurchaseOrder item in pu_order)
                 {
                     sqlText += string.Format(@"INSERT INTO Sync_Table_PurchaseOrder
-                               (voucherdate, clerk_name, partner_name, pubuserdefdecm2, cinvname, cinvcode, priuserdefnvc1, freeItem1, freeItem2, freeItem3, quantity, pubuserdefdecm1, quantity2, price,amount)
+                               (voucherdate, clerk_name, partner_name, pubuserdefdecm2, cinvname, cinvcode, priuserdefnvc1, freeItem1, freeItem2, freeItem3, quantity, pubuserdefdecm1, quantity2, price,amount,maker)
                                VALUES
-                               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}')",
-                                item.voucherdate, item.clerk_name, item.partner_name, item.pubuserdefdecm2, item.cinvname, item.cinvcode, item.priuserdefnvc1, item.freeItem1, item.freeItem2, item.freeItem3, item.quantity, item.pubuserdefdecm1, item.quantity2, item.price, item.amount);
-                                }
+                               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}')",
+                                item.voucherdate, item.clerk_name, item.partner_name, item.pubuserdefdecm2, item.cinvname, item.cinvcode, item.priuserdefnvc1, item.freeItem1, item.freeItem2, item.freeItem3, item.quantity, item.pubuserdefdecm1, item.quantity2, item.price, item.amount,
+                                iEntity.AddUser);
+                }
                 db.ExecuteUpdate(sqlText);
                 MessageBox.Show("导入成功！");
             }
@@ -112,18 +120,15 @@ namespace DataImport
 
         private void ExcelImport_Load(object sender, EventArgs e)
         {
+            clear_dgv();
             truncateTable();
+            Refreshdgv();
+            SelectTreeView(this.treeView1, "pu_order");
         }
 
-        private void truncateTable(string type= "all")
+        private void truncateTable()
         {
-            if (type == "pu_order")//采购订单
-            {
-                db.ExecuteUpdate("truncate table Sync_Table_PurchaseOrder");
-            }
-            else {//清除所有
-                db.ExecuteUpdate("truncate table Sync_Table_PurchaseOrder");
-            }
+            db.ExecuteUpdate("truncate table Sync_Table_PurchaseOrder");
         }
         private void Refreshdgv()
         {
@@ -132,12 +137,15 @@ namespace DataImport
 
         private void 刷新ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            clear_dgv();
             truncateTable();
             Refreshdgv();
         }
 
         private void 同步ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string tree_name = this.treeView1.SelectedNode.Name;//节点名称 pu_order.采购订单
+
             if (dgvImport.DataSource == null)
             {
                 MessageBox.Show("请先导入Excel数据，在进行同步操作！");
@@ -148,37 +156,46 @@ namespace DataImport
             string msg = "";
             int succeed = 0;
             int defeated = 0;
-            sql = "select distinct code from HM_DataImportInfo";
-            DataSet ds = db.ExecuteSelect(sql);
+            if (tree_name == "pu_order")
+            {
+                sql = "select distinct voucherdate,partner_name from Sync_Table_PurchaseOrder";
+                DataSet ds = db.ExecuteSelect(sql);
 
-            foreach (DataRow item in ds.Tables[0].Rows)
-            {
-                //添加存储过程参数
-                SqlParameter[] parms =
-            {
-                new SqlParameter("@ResultStr",SqlDbType.NVarChar, 300),
-                new SqlParameter("@code",SqlDbType.NVarChar, 50),
-            };
-                parms[0].Direction = ParameterDirection.Output;
-                parms[1].Value = item["code"];
-                DataSet proc_ds = db.DB_Query("", parms);
-                msg = (String)parms[0].Value;
-                if (msg.Contains("同步成功"))
+                foreach (DataRow item in ds.Tables[0].Rows)
                 {
-                    succeed++;
-                }
-                else
-                {
-                    defeated++;
-                    TextMsg += msg + "\r\n";
+                    //添加存储过程参数
+                    SqlParameter[] parms =
+                    {
+                        new SqlParameter("@ResultStr",SqlDbType.NVarChar, 300),
+                        new SqlParameter("@voucherdate",SqlDbType.NVarChar, 50),
+                        new SqlParameter("@partner_name",SqlDbType.NVarChar, 50),
+                    };
+                    parms[0].Direction = ParameterDirection.Output;
+                    parms[1].Value = item["voucherdate"];
+                    parms[2].Value = item["partner_name"];
+                    DataSet proc_ds = db.DB_Query("Sync_Proc_PurchaseOrder", parms);
+                    msg = (String)parms[0].Value;
+                    if (msg.Contains("同步成功"))
+                    {
+                        succeed++;
+                    }
+                    else
+                    {
+                        defeated++;
+                        TextMsg += msg + "\r\n";
+                    }
                 }
             }
             MessageBox.Show("成功：" + succeed + "次，失败：" + defeated + "次\r\n" + TextMsg);
-            if (defeated == 0)
-            {
-                truncateTable();
-                Refreshdgv();
-            }
+            clear_dgv();
+            truncateTable();
+            Refreshdgv();
+        }
+        /// <summary>
+        /// 清空数据
+        /// </summary>
+        private void clear_dgv() {
+            pu_order = null;
         }
         /// <summary>
         /// 生成存货档案
@@ -195,6 +212,11 @@ namespace DataImport
                     //查询存货分类id
                     string str_class = "select id from dbo.AA_InventoryClass where name='荒料'";
                     int idinventoryclass = Convert.ToInt32(db.getValue(str_class));
+                    //查询计量单位组
+                    string str_group = "select id from AA_UnitGroup where name ='方数/实重'";
+                    int idunitgroup = Convert.ToInt32(db.getValue(str_group));
+
+
                     StringBuilder sqlText = new StringBuilder();
                     ImportEntity entity = new ImportEntity();
                     sqlText.Append(" insert AA_Inventory(code,name,shorthand,isLimitedWithdraw,isBatch,isQualityPeriod,isSale,isMadeSelf,isPurchase,isMaterial,");
@@ -203,20 +225,46 @@ namespace DataImport
                     sqlText.Append(" MustInputFreeitem9, MustInputFreeitem1, MustInputFreeitem8, MustInputFreeitem0,HasEverChanged,isphantom, ControlRangeFreeitem0,ControlRangeFreeitem1, ControlRangeFreeitem2,ControlRangeFreeitem3, ");
                     sqlText.Append(" ControlRangeFreeitem4, ControlRangeFreeitem5, ControlRangeFreeitem6, ControlRangeFreeitem7, ControlRangeFreeitem8,ControlRangeFreeitem9,IsLaborCost,IsNew,MadeRecordDate,IsSuite, ");
                     sqlText.Append(" IsWeigh,idinventoryclass,idMarketingOrgan,idunit,idunitbymanufacture,idUnitByPurchase, idUnitByRetail, idUnitBySale, idUnitByStock,taxRate, ");
-                    sqlText.Append(" unittype, valueType,madeDate, updated, createdTime, Creater,priuserdefnvc1,IsModifiedCode,WithOutBargain)");
+                    sqlText.Append(" unittype, valueType,madeDate, updated, createdTime, Creater,priuserdefnvc1,IsModifiedCode,WithOutBargain,idunitgroup,idSubUnitByReport)");
                     sqlText.AppendFormat(" values ('{0}','{1}',dbo.FB_GetChineseSpell('{2}'),0,1,0,0,1,1,0,", item.cinvcode, item.cinvname, item.cinvname);
                     sqlText.Append(" 0,0,0,0,0,0,1,1,0,1,");
                     sqlText.Append(" 0,0,0,0,0,0,0,0,0,0,");
                     sqlText.Append(" 0,0,0,0,1,0,0,0,0,0,");
                     sqlText.Append(" 0,0,0,0,0,0,0,1,getdate(),0,");
                     sqlText.AppendFormat(" 0,'{0}',1,1,1,1,1,1,1,108,", idinventoryclass);
-                    sqlText.AppendFormat(" 595,199,getdate(),getdate(),getdate(),'demo','{0}',1,0)",item.priuserdefnvc1);
+                    sqlText.AppendFormat(" 594,199,getdate(),getdate(),getdate(),'demo','{0}',1,0,'{1}',2)", item.priuserdefnvc1, idunitgroup);
                     db.ExecuteUpdate(sqlText.ToString());
+                    setInventoryUnitPrice(item, idunitgroup);//插入存货计量单位中间表
                 }
             }
 
         }
-
+        public void setInventoryUnitPrice(Sync_Table_PurchaseOrder data, int idunitgroup)
+        {
+            //存货id
+            string idinventory = db.getValue("select id from aa_inventory where code='" + data.cinvcode + "'").ToString();
+            //存货计量单位
+            string str_unit = "select id,isMainUnit,rateDescription from AA_Unit where idunitgroup=" + idunitgroup;
+            DataTable dt = db.ExecuteSelect(str_unit).Tables[0];
+            string str_ivt_unit = "";//插入存货计量单位组
+            foreach (DataRow item in dt.Rows)
+            {
+                //插入存货多计量
+                str_ivt_unit += string.Format(@"insert into AA_InventoryUnitPrice(latestSalePrice,invSCost3,rateofexchange,rateDescription,invSCost6,
+                                  updatedBy,latestPPrice,invMPCost,invSCost10,idinventory,
+                                  invSCost2,isGroup,invSCost9,retailPrice,invSCost5,
+                                  invLSPrice,invSCost7,latestUnitSalePrice,latestUnitTaxSalePrice,latestoutsourcedprice,
+                                  invSCost1,code,idunitgroup,invSCost4,updated,
+                                  highestoutsourcedprice,idunit,invSCost8)
+                                  values  (NULL,NULL,1,'{0}',NULL,
+								  NULL,NULL,NULL,NULL,'{1}',
+								  NULL,1,NULL,NULL,NULL,
+								  NULL,NULL,NULL,NULL,NULL,
+								  NULL,'0000',{2},NULL,getdate(),
+								  NULL,'{3}',NULL)", item["rateDescription"].ToString(), idinventory, idunitgroup, item["id"].ToString());
+            }
+            db.ExecuteUpdate(str_ivt_unit);
+        }
         private void dgvImport_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             //设置显示的列名
@@ -244,6 +292,29 @@ namespace DataImport
             //{
             //    MessageBox.Show("11");
             //}
+        }
+
+        /// <summary>
+        /// 设置TreeView选中节点
+        /// </summary>
+        /// <param name="treeView"></param>
+        /// <param name="selectStr">选中节点文本</param>
+        private void SelectTreeView(TreeView treeView, string selectStr)
+        {
+            for (int i = 0; i < treeView.Nodes.Count; i++)
+            {
+                for (int j = 0; j < treeView.Nodes[i].Nodes.Count; j++)
+                {
+                    if (treeView.Nodes[i].Nodes[j].Name == selectStr)
+                    {
+                        treeView1.SelectedNode = treeView.Nodes[i].Nodes[j];//选中
+                        //treeView1.Nodes[i].Nodes[j].Checked = true;
+                        treeView.Nodes[i].Expand();//展开父级
+                        treeView.Focus();
+                        return;
+                    }
+                }
+            }
         }
 
     }

@@ -137,3 +137,5 @@ C:\Users\HC-Xiao\Desktop\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.ExcelI
 C:\Users\HC-Xiao\Desktop\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.LoginWin.resources
 C:\Users\HC-Xiao\Desktop\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.Properties.Resources.resources
 C:\Users\HC-Xiao\Desktop\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.csproj.GenerateResource.Cache
+C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\Debug\GenerateResource-ResGen.read.1.tlog
+C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog

@@ -1,5 +1,7 @@
+USE [UFTData134085_000002]
+GO
 
-/****** Object:  Table [dbo].[Sync_Table_PurchaseOrder]    Script Date: 08/17/2017 21:24:47 ******/
+/****** Object:  Table [dbo].[Sync_Table_PurchaseOrder]    Script Date: 08/18/2017 14:18:14 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -23,6 +25,7 @@ CREATE TABLE [dbo].[Sync_Table_PurchaseOrder](
 	[quantity2] [decimal](18, 4) NULL,
 	[price] [decimal](18, 4) NULL,
 	[amount] [decimal](18, 4) NULL,
+	[maker] [nvarchar](500) NULL,
  CONSTRAINT [PK_Sync_Table_PurchaseOrder] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
