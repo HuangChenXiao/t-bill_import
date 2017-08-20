@@ -71,6 +71,7 @@
     <Compile Include="LoginWin.Designer.cs">
       <DependentUpon>LoginWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="model\Sync_Table_ExpenseVoucher.cs" />
     <Compile Include="model\Sync_Table_PurchaseOrder.cs" />
     <Compile Include="Order_b.cs" />
     <Compile Include="Program.cs" />

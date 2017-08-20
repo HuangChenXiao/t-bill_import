@@ -21,6 +21,7 @@ namespace DataImport
         DbOperate db;
 
         List<Sync_Table_PurchaseOrder> pu_order;//采购订单
+        List<Sync_Table_ExpenseVoucher> cs_expense;//费用单
         public ExcelImport(ImportEntity entity)
         {
             InitializeComponent();
@@ -33,6 +34,11 @@ namespace DataImport
         string sqlText = "";
         private void excel导入ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.treeView1.SelectedNode == null)
+            {
+                MessageBox.Show("请选择对应的导入模块！");
+                return;
+            }
             OpenFileDialog dialog = new OpenFileDialog();
             string fileName = "";
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -60,14 +66,10 @@ namespace DataImport
             myCommand = new OleDbDataAdapter(strExcel, connStr);
             dt = new DataTable();
             myCommand.Fill(dt);
-            if (this.treeView1.SelectedNode==null)
-            {
-                MessageBox.Show("请选择对应的导入模块！");
-                return;
-            }
             clear_dgv();
             truncateTable();
             string tree_name = this.treeView1.SelectedNode.Name;//节点名称 pu_order.采购订单
+            sqlText = "";
             if (tree_name == "pu_order")
             {
                 //采购订单
@@ -100,7 +102,6 @@ namespace DataImport
                 }
                 CreateInventory();//不存在存货则添加
                 truncateTable();//truncate
-                sqlText = "";
                 foreach (Sync_Table_PurchaseOrder item in pu_order)
                 {
                     sqlText += string.Format(@"INSERT INTO Sync_Table_PurchaseOrder
@@ -110,9 +111,62 @@ namespace DataImport
                                 item.voucherdate, item.clerk_name, item.partner_name, item.pubuserdefdecm2, item.cinvname, item.cinvcode, item.priuserdefnvc1, item.freeItem1, item.freeItem2, item.freeItem3, item.quantity, item.pubuserdefdecm1, item.quantity2, item.price, item.amount,
                                 iEntity.AddUser);
                 }
-                db.ExecuteUpdate(sqlText);
-                MessageBox.Show("导入成功！");
             }
+            else if (tree_name == "cs_expense") {
+                //费用单
+                cs_expense = new List<Sync_Table_ExpenseVoucher>();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Sync_Table_ExpenseVoucher dto = new Sync_Table_ExpenseVoucher();
+                    //表头
+                    dto.parent_name = dt.Rows[i]["往来单位"].ToString();
+                    dto.pubuserdefnvc4 = dt.Rows[i]["客户"].ToString();
+                    dto.voucherdate = dt.Rows[i]["日期"].ToString();
+                    //表体
+                    dto.priuserdefnvc1 = dt.Rows[i]["品名"].ToString();
+                    dto.priuserdefnvc2 = dt.Rows[i]["荒料编号"].ToString();
+                    dto.priuserdefdecm1 = dt.Rows[i]["总平方数㎡"].ToDecimalIfNull();
+                    dto.priuserdefdecm2 = dt.Rows[i]["片数"].ToDecimalIfNull();
+                    dto.priuserdefdecm3 = dt.Rows[i]["件数"].ToDecimalIfNull();
+
+                    dto.priuserdefnvc5 = dt.Rows[i]["厚度"].ToString();
+                    dto.pubuserdefdecm3 = dt.Rows[i]["实重"].ToDecimalIfNull();
+                    dto.pubuserdefdecm4 = dt.Rows[i]["出材"].ToDecimalIfNull();
+                    dto.priuserdefnvc3 = dt.Rows[i]["荒料上网"].ToString();
+                    dto.priuserdefnvc4 = dt.Rows[i]["表面"].ToString();
+
+                    dto.pubuserdefnvc1 = dt.Rows[i]["加工需求"].ToString();
+                    dto.pubuserdefdecm1 = dt.Rows[i]["机台号"].ToDecimalIfNull();
+                    dto.pubuserdefnvc3 = dt.Rows[i]["业务"].ToString();
+                    dto.pubuserdefnvc2 = dt.Rows[i]["预向订单"].ToString();
+                    dto.price = dt.Rows[i]["单价"].ToDecimalIfNull();
+
+                    dto.money = dt.Rows[i]["金额"].ToDecimalIfNull();
+
+
+                    cs_expense.Add(dto);
+                }
+                truncateTable();//truncate
+                foreach (Sync_Table_ExpenseVoucher item in cs_expense)
+                {
+                    sqlText += string.Format(@"INSERT INTO Sync_Table_ExpenseVoucher
+                               (parent_name, pubuserdefnvc4, voucherdate, priuserdefnvc1, priuserdefnvc2, priuserdefdecm1, priuserdefdecm2, priuserdefdecm3, priuserdefnvc5, 
+                                pubuserdefdecm3, pubuserdefdecm4, priuserdefnvc3, priuserdefnvc4, pubuserdefnvc1, pubuserdefdecm1, pubuserdefnvc3, pubuserdefnvc2, price, money, 
+                                maker)
+                                VALUES
+                                ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}')",
+                                item.parent_name, item.pubuserdefnvc4, item.voucherdate, item.priuserdefnvc1, item.priuserdefnvc2, item.priuserdefdecm1, item.priuserdefdecm2, item.priuserdefdecm3, item.priuserdefnvc5,
+                                item.pubuserdefdecm3, item.pubuserdefdecm4, item.priuserdefnvc3, item.priuserdefnvc4, item.pubuserdefnvc1, item.pubuserdefdecm1, item.pubuserdefnvc3, item.pubuserdefnvc2, item.price, item.money,
+                                iEntity.AddUser);
+                }
+            }
+            else {
+                MessageBox.Show("请选择对应的导入模块！");
+                conn.Close();//关闭excel
+                return;
+            }
+            db.ExecuteUpdate(sqlText);
+            MessageBox.Show("导入成功！");
             conn.Close();//关闭excel
 
             Refreshdgv();
@@ -123,16 +177,18 @@ namespace DataImport
             clear_dgv();
             truncateTable();
             Refreshdgv();
-            SelectTreeView(this.treeView1, "pu_order");
+            //SelectTreeView(this.treeView1, "pu_order");
         }
 
         private void truncateTable()
         {
-            db.ExecuteUpdate("truncate table Sync_Table_PurchaseOrder");
+            db.ExecuteUpdate("truncate table Sync_Table_PurchaseOrder");//清空采购订单
+            db.ExecuteUpdate("truncate table Sync_Table_ExpenseVoucher");//清空费用单
         }
         private void Refreshdgv()
         {
             this.dgvImport.DataSource = pu_order;
+            this.dgv_expense.DataSource = cs_expense;
         }
 
         private void 刷新ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -145,12 +201,7 @@ namespace DataImport
         private void 同步ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string tree_name = this.treeView1.SelectedNode.Name;//节点名称 pu_order.采购订单
-
-            if (dgvImport.DataSource == null)
-            {
-                MessageBox.Show("请先导入Excel数据，在进行同步操作！");
-                return;
-            }
+            
             string sql = "";
             string TextMsg = "";
             string msg = "";
@@ -158,6 +209,11 @@ namespace DataImport
             int defeated = 0;
             if (tree_name == "pu_order")
             {
+                if (pu_order == null)
+                {
+                    MessageBox.Show("请先导入Excel数据，在进行同步操作！");
+                    return;
+                }
                 sql = "select distinct voucherdate,partner_name from Sync_Table_PurchaseOrder";
                 DataSet ds = db.ExecuteSelect(sql);
 
@@ -186,6 +242,41 @@ namespace DataImport
                     }
                 }
             }
+            else if (tree_name == "cs_expense")
+            {
+                if (cs_expense == null)
+                {
+                    MessageBox.Show("请先导入Excel数据，在进行同步操作！");
+                    return;
+                }
+                sql = "select distinct voucherdate,parent_name from Sync_Table_ExpenseVoucher";
+                DataSet ds = db.ExecuteSelect(sql);
+
+                foreach (DataRow item in ds.Tables[0].Rows)
+                {
+                    //添加存储过程参数
+                    SqlParameter[] parms =
+                    {
+                        new SqlParameter("@ResultStr",SqlDbType.NVarChar, 300),
+                        new SqlParameter("@voucherdate",SqlDbType.NVarChar, 50),
+                        new SqlParameter("@parent_name",SqlDbType.NVarChar, 50),
+                    };
+                    parms[0].Direction = ParameterDirection.Output;
+                    parms[1].Value = item["voucherdate"];
+                    parms[2].Value = item["parent_name"];
+                    DataSet proc_ds = db.DB_Query("Sync_Proc_ExpenseVoucher", parms);
+                    msg = (String)parms[0].Value;
+                    if (msg.Contains("同步成功"))
+                    {
+                        succeed++;
+                    }
+                    else
+                    {
+                        defeated++;
+                        TextMsg += msg + "\r\n";
+                    }
+                }
+            }
             MessageBox.Show("成功：" + succeed + "次，失败：" + defeated + "次\r\n" + TextMsg);
             clear_dgv();
             truncateTable();
@@ -196,6 +287,7 @@ namespace DataImport
         /// </summary>
         private void clear_dgv() {
             pu_order = null;
+            cs_expense = null;
         }
         /// <summary>
         /// 生成存货档案
@@ -288,34 +380,56 @@ namespace DataImport
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            //if (treeView1.SelectedNode.Name == "pu_order")
-            //{
-            //    MessageBox.Show("11");
-            //}
-        }
-
-        /// <summary>
-        /// 设置TreeView选中节点
-        /// </summary>
-        /// <param name="treeView"></param>
-        /// <param name="selectStr">选中节点文本</param>
-        private void SelectTreeView(TreeView treeView, string selectStr)
-        {
-            for (int i = 0; i < treeView.Nodes.Count; i++)
+            if (treeView1.SelectedNode.Name == "pu_order")
             {
-                for (int j = 0; j < treeView.Nodes[i].Nodes.Count; j++)
-                {
-                    if (treeView.Nodes[i].Nodes[j].Name == selectStr)
-                    {
-                        treeView1.SelectedNode = treeView.Nodes[i].Nodes[j];//选中
-                        //treeView1.Nodes[i].Nodes[j].Checked = true;
-                        treeView.Nodes[i].Expand();//展开父级
-                        treeView.Focus();
-                        return;
-                    }
-                }
+                this.dgvImport.Visible = true;
+                this.dgv_expense.Visible = false;
+                this.dgv_report.Visible = false;
+            }
+            else if (treeView1.SelectedNode.Name == "cs_expense")
+            {
+                this.dgvImport.Visible = false;
+                this.dgv_expense.Visible = true;
+                this.dgv_report.Visible = false;
+            }
+            else if (treeView1.SelectedNode.Name == "aa__report")
+            {
+                this.dgvImport.Visible = false;
+                this.dgv_expense.Visible = false;
+                this.dgv_report.Visible = true;
             }
         }
 
+
+        private void dgv_expense_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            //设置显示的列名
+            //表头
+            dgv_expense.Columns[0].Visible = false;
+            dgv_expense.Columns["parent_name"].HeaderText = "往来单位";
+            dgv_expense.Columns["pubuserdefnvc4"].HeaderText = "客户";
+            dgv_expense.Columns["voucherdate"].HeaderText = "日期";
+            //表体
+            dgv_expense.Columns["priuserdefnvc1"].HeaderText = "品名";
+            dgv_expense.Columns["priuserdefnvc2"].HeaderText = "荒料编号";
+            dgv_expense.Columns["priuserdefdecm1"].HeaderText = "总平方数㎡";
+            dgv_expense.Columns["priuserdefdecm2"].HeaderText = "片数";
+            dgv_expense.Columns["priuserdefdecm3"].HeaderText = "件数";
+
+            dgv_expense.Columns["priuserdefnvc5"].HeaderText = "厚度";
+            dgv_expense.Columns["pubuserdefdecm3"].HeaderText = "实重";
+            dgv_expense.Columns["pubuserdefdecm4"].HeaderText = "出材";
+            dgv_expense.Columns["priuserdefnvc3"].HeaderText = "荒料上网";
+            dgv_expense.Columns["priuserdefnvc4"].HeaderText = "表面";
+
+            dgv_expense.Columns["pubuserdefnvc1"].HeaderText = "加工需求";
+            dgv_expense.Columns["pubuserdefdecm1"].HeaderText = "机台号";
+            dgv_expense.Columns["pubuserdefnvc3"].HeaderText = "业务";
+            dgv_expense.Columns["pubuserdefnvc2"].HeaderText = "预向订单";
+            dgv_expense.Columns["price"].HeaderText = "单价";
+
+            dgv_expense.Columns["money"].HeaderText = "金额";
+
+        }
     }
 }
