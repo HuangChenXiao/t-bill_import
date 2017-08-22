@@ -123,8 +123,6 @@ C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\D
 C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.ExcelImport.resources
 C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.LoginWin.resources
 C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.Properties.Resources.resources
-C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\Debug\GenerateResource.read.1.tlog
-C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Documents and Settings\Administrator\桌面\tldemo\trunk\DataImport\bin\Debug\DBHelper.dll
 C:\Users\HC-Xiao\Desktop\tldemo\trunk\DataImport\bin\Debug\DataImport.exe.config
 C:\Users\HC-Xiao\Desktop\tldemo\trunk\DataImport\obj\x86\Debug\DataImport.exe

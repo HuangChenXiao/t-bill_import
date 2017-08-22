@@ -1,5 +1,4 @@
-USE [UFTData134085_000002]
-GO
+
 
 /****** Object:  Table [dbo].[Sync_Table_PurchaseOrder]    Script Date: 08/18/2017 14:18:14 ******/
 SET ANSI_NULLS ON

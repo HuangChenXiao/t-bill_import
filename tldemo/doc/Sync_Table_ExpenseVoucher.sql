@@ -1,6 +1,6 @@
 
 
-/****** Object:  Table [dbo].[Sync_Table_ExpenseVoucher]    Script Date: 08/20/2017 16:34:44 ******/
+/****** Object:  Table [dbo].[Sync_Table_ExpenseVoucher]    Script Date: 08/22/2017 09:42:50 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -17,7 +17,6 @@ CREATE TABLE [dbo].[Sync_Table_ExpenseVoucher](
 	[priuserdefdecm1] [decimal](18, 4) NULL,
 	[priuserdefdecm2] [decimal](18, 4) NULL,
 	[priuserdefdecm3] [decimal](18, 4) NULL,
-	[priuserdefnvc5] [nvarchar](500) NULL,
 	[pubuserdefdecm3] [decimal](18, 4) NULL,
 	[pubuserdefdecm4] [decimal](18, 4) NULL,
 	[priuserdefnvc3] [nvarchar](500) NULL,

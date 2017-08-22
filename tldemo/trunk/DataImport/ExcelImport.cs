@@ -129,10 +129,9 @@ namespace DataImport
                     dto.priuserdefdecm2 = dt.Rows[i]["片数"].ToDecimalIfNull();
                     dto.priuserdefdecm3 = dt.Rows[i]["件数"].ToDecimalIfNull();
 
-                    dto.priuserdefnvc5 = dt.Rows[i]["厚度"].ToString();
                     dto.pubuserdefdecm3 = dt.Rows[i]["实重"].ToDecimalIfNull();
                     dto.pubuserdefdecm4 = dt.Rows[i]["出材"].ToDecimalIfNull();
-                    dto.priuserdefnvc3 = dt.Rows[i]["荒料上网"].ToString();
+                    dto.priuserdefnvc3 = dt.Rows[i]["厚度"].ToString();
                     dto.priuserdefnvc4 = dt.Rows[i]["表面"].ToString();
 
                     dto.pubuserdefnvc1 = dt.Rows[i]["加工需求"].ToString();
@@ -150,12 +149,12 @@ namespace DataImport
                 foreach (Sync_Table_ExpenseVoucher item in cs_expense)
                 {
                     sqlText += string.Format(@"INSERT INTO Sync_Table_ExpenseVoucher
-                               (parent_name, pubuserdefnvc4, voucherdate, priuserdefnvc1, priuserdefnvc2, priuserdefdecm1, priuserdefdecm2, priuserdefdecm3, priuserdefnvc5, 
+                               (parent_name, pubuserdefnvc4, voucherdate, priuserdefnvc1, priuserdefnvc2, priuserdefdecm1, priuserdefdecm2, priuserdefdecm3, 
                                 pubuserdefdecm3, pubuserdefdecm4, priuserdefnvc3, priuserdefnvc4, pubuserdefnvc1, pubuserdefdecm1, pubuserdefnvc3, pubuserdefnvc2, price, money, 
                                 maker)
                                 VALUES
-                                ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}')",
-                                item.parent_name, item.pubuserdefnvc4, item.voucherdate, item.priuserdefnvc1, item.priuserdefnvc2, item.priuserdefdecm1, item.priuserdefdecm2, item.priuserdefdecm3, item.priuserdefnvc5,
+                                ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}')",
+                                item.parent_name, item.pubuserdefnvc4, item.voucherdate, item.priuserdefnvc1, item.priuserdefnvc2, item.priuserdefdecm1, item.priuserdefdecm2, item.priuserdefdecm3,
                                 item.pubuserdefdecm3, item.pubuserdefdecm4, item.priuserdefnvc3, item.priuserdefnvc4, item.pubuserdefnvc1, item.pubuserdefdecm1, item.pubuserdefnvc3, item.pubuserdefnvc2, item.price, item.money,
                                 iEntity.AddUser);
                 }
@@ -318,7 +317,7 @@ namespace DataImport
                     sqlText.Append(" ControlRangeFreeitem4, ControlRangeFreeitem5, ControlRangeFreeitem6, ControlRangeFreeitem7, ControlRangeFreeitem8,ControlRangeFreeitem9,IsLaborCost,IsNew,MadeRecordDate,IsSuite, ");
                     sqlText.Append(" IsWeigh,idinventoryclass,idMarketingOrgan,idunit,idunitbymanufacture,idUnitByPurchase, idUnitByRetail, idUnitBySale, idUnitByStock,taxRate, ");
                     sqlText.Append(" unittype, valueType,madeDate, updated, createdTime, Creater,priuserdefnvc1,IsModifiedCode,WithOutBargain,idunitgroup,idSubUnitByReport)");
-                    sqlText.AppendFormat(" values ('{0}','{1}',dbo.FB_GetChineseSpell('{2}'),0,1,0,0,1,1,0,", item.cinvcode, item.cinvname, item.cinvname);
+                    sqlText.AppendFormat(" values ('{0}','{1}',dbo.FB_GetChineseSpell('{2}'),0,1,0,1,1,1,1,", item.cinvcode, item.cinvname, item.cinvname);
                     sqlText.Append(" 0,0,0,0,0,0,1,1,0,1,");
                     sqlText.Append(" 0,0,0,0,0,0,0,0,0,0,");
                     sqlText.Append(" 0,0,0,0,1,0,0,0,0,0,");
@@ -416,7 +415,6 @@ namespace DataImport
             dgv_expense.Columns["priuserdefdecm2"].HeaderText = "片数";
             dgv_expense.Columns["priuserdefdecm3"].HeaderText = "件数";
 
-            dgv_expense.Columns["priuserdefnvc5"].HeaderText = "厚度";
             dgv_expense.Columns["pubuserdefdecm3"].HeaderText = "实重";
             dgv_expense.Columns["pubuserdefdecm4"].HeaderText = "出材";
             dgv_expense.Columns["priuserdefnvc3"].HeaderText = "荒料上网";

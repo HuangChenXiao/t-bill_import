@@ -109,14 +109,6 @@ namespace DataImport.model
         /// <summary>
         /// 
         /// </summary>
-        public string priuserdefnvc5
-        {
-            set { _priuserdefnvc5 = value; }
-            get { return _priuserdefnvc5; }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
         public decimal? pubuserdefdecm3
         {
             set { _pubuserdefdecm3 = value; }
