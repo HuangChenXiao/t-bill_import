@@ -97,6 +97,11 @@ namespace DataImport
                     dto.price = dt.Rows[i]["单价"].ToDecimalIfNull();
                     dto.amount = dt.Rows[i]["金额"].ToDecimalIfNull();
 
+                    dto.pubuserdefdecm3 = dt.Rows[i]["矿山进价"].ToDecimalIfNull();
+                    dto.pubuserdefdecm4 = dt.Rows[i]["信用证单价"].ToDecimalIfNull();
+                    dto.priuserdefdecm1 = dt.Rows[i]["总进价"].ToDecimalIfNull();
+                    dto.priuserdefdecm2 = dt.Rows[i]["费用单价"].ToDecimalIfNull();
+
 
                     pu_order.Add(dto);
                 }
@@ -375,6 +380,11 @@ namespace DataImport
             dgvImport.Columns["quantity2"].HeaderText = "实重";
             dgvImport.Columns["price"].HeaderText = "单价";
             dgvImport.Columns["amount"].HeaderText = "金额";
+
+            dgvImport.Columns["pubuserdefdecm3"].HeaderText = "矿山进价";
+            dgvImport.Columns["pubuserdefdecm4"].HeaderText = "信用证单价";
+            dgvImport.Columns["priuserdefdecm1"].HeaderText = "总进价";
+            dgvImport.Columns["priuserdefdecm2"].HeaderText = "费用单价";
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)

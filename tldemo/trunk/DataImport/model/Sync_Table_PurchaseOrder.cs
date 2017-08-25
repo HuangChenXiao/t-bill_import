@@ -24,5 +24,10 @@ namespace DataImport.model
         public decimal price { get; set; }
         public decimal amount { get; set; }
 
+        public decimal pubuserdefdecm3 { get; set; }
+        public decimal pubuserdefdecm4 { get; set; }
+        public decimal priuserdefdecm1 { get; set; }
+        public decimal priuserdefdecm2 { get; set; }
+
     }
 }
