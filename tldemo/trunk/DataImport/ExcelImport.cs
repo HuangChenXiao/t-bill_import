@@ -110,11 +110,11 @@ namespace DataImport
                 foreach (Sync_Table_PurchaseOrder item in pu_order)
                 {
                     sqlText += string.Format(@"INSERT INTO Sync_Table_PurchaseOrder
-                               (voucherdate, clerk_name, partner_name, pubuserdefdecm2, cinvname, cinvcode, priuserdefnvc1, freeItem1, freeItem2, freeItem3, quantity, pubuserdefdecm1, quantity2, price,amount,maker)
+                               (voucherdate, clerk_name, partner_name, pubuserdefdecm2, cinvname, cinvcode, priuserdefnvc1, freeItem1, freeItem2, freeItem3, quantity, pubuserdefdecm1, quantity2, price,amount,maker,pubuserdefdecm3,pubuserdefdecm4,priuserdefdecm1,priuserdefdecm2)
                                VALUES
-                               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}')",
+                               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}')",
                                 item.voucherdate, item.clerk_name, item.partner_name, item.pubuserdefdecm2, item.cinvname, item.cinvcode, item.priuserdefnvc1, item.freeItem1, item.freeItem2, item.freeItem3, item.quantity, item.pubuserdefdecm1, item.quantity2, item.price, item.amount,
-                                iEntity.AddUser);
+                                iEntity.AddUser, item.pubuserdefdecm3, item.pubuserdefdecm4, item.priuserdefdecm1, item.priuserdefdecm2);
                 }
             }
             else if (tree_name == "cs_expense") {
