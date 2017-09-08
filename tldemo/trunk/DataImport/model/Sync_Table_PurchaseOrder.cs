@@ -26,8 +26,9 @@ namespace DataImport.model
 
         public decimal pubuserdefdecm3 { get; set; }
         public decimal pubuserdefdecm4 { get; set; }
-        public decimal priuserdefdecm1 { get; set; }
         public decimal priuserdefdecm2 { get; set; }
+        public decimal priuserdefdecm3 { get; set; }
+        public decimal priuserdefdecm4 { get; set; }
 
     }
 }

@@ -1,6 +1,6 @@
 
 
-/****** Object:  Table [dbo].[Sync_Table_PurchaseOrder]    Script Date: 08/25/2017 15:43:54 ******/
+/****** Object:  Table [dbo].[Sync_Table_PurchaseOrder]    Script Date: 09/08/2017 13:33:34 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -29,6 +29,8 @@ CREATE TABLE [dbo].[Sync_Table_PurchaseOrder](
 	[priuserdefdecm1] [decimal](18, 4) NULL,
 	[priuserdefdecm2] [decimal](18, 4) NULL,
 	[maker] [nvarchar](500) NULL,
+	[priuserdefdecm3] [decimal](18, 4) NULL,
+	[priuserdefdecm4] [decimal](18, 4) NULL,
  CONSTRAINT [PK_Sync_Table_PurchaseOrder] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

@@ -97,10 +97,12 @@ namespace DataImport
                     dto.price = dt.Rows[i]["单价"].ToDecimalIfNull();
                     dto.amount = dt.Rows[i]["金额"].ToDecimalIfNull();
 
-                    dto.pubuserdefdecm3 = dt.Rows[i]["矿山进价"].ToDecimalIfNull();
+                    dto.pubuserdefdecm3 = dt.Rows[i]["矿山单价"].ToDecimalIfNull();
                     dto.pubuserdefdecm4 = dt.Rows[i]["信用证单价"].ToDecimalIfNull();
-                    dto.priuserdefdecm1 = dt.Rows[i]["总进价"].ToDecimalIfNull();
                     dto.priuserdefdecm2 = dt.Rows[i]["费用单价"].ToDecimalIfNull();
+
+                    dto.priuserdefdecm3 = dt.Rows[i]["初成本单价"].ToDecimalIfNull();
+                    dto.priuserdefdecm4 = dt.Rows[i]["荒料初成本"].ToDecimalIfNull();
 
 
                     pu_order.Add(dto);
@@ -110,11 +112,11 @@ namespace DataImport
                 foreach (Sync_Table_PurchaseOrder item in pu_order)
                 {
                     sqlText += string.Format(@"INSERT INTO Sync_Table_PurchaseOrder
-                               (voucherdate, clerk_name, partner_name, pubuserdefdecm2, cinvname, cinvcode, priuserdefnvc1, freeItem1, freeItem2, freeItem3, quantity, pubuserdefdecm1, quantity2, price,amount,maker,pubuserdefdecm3,pubuserdefdecm4,priuserdefdecm1,priuserdefdecm2)
+                               (voucherdate, clerk_name, partner_name, pubuserdefdecm2, cinvname, cinvcode, priuserdefnvc1, freeItem1, freeItem2, freeItem3, quantity, pubuserdefdecm1, quantity2, price,amount,maker,pubuserdefdecm3,pubuserdefdecm4,priuserdefdecm2,priuserdefdecm3,priuserdefdecm4)
                                VALUES
-                               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}')",
+                               ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}')",
                                 item.voucherdate, item.clerk_name, item.partner_name, item.pubuserdefdecm2, item.cinvname, item.cinvcode, item.priuserdefnvc1, item.freeItem1, item.freeItem2, item.freeItem3, item.quantity, item.pubuserdefdecm1, item.quantity2, item.price, item.amount,
-                                iEntity.AddUser, item.pubuserdefdecm3, item.pubuserdefdecm4, item.priuserdefdecm1, item.priuserdefdecm2);
+                                iEntity.AddUser, item.pubuserdefdecm3, item.pubuserdefdecm4, item.priuserdefdecm2, item.priuserdefdecm3, item.priuserdefdecm4);
                 }
             }
             else if (tree_name == "cs_expense") {
@@ -381,10 +383,11 @@ namespace DataImport
             dgvImport.Columns["price"].HeaderText = "单价";
             dgvImport.Columns["amount"].HeaderText = "金额";
 
-            dgvImport.Columns["pubuserdefdecm3"].HeaderText = "矿山进价";
+            dgvImport.Columns["pubuserdefdecm3"].HeaderText = "矿山单价";
             dgvImport.Columns["pubuserdefdecm4"].HeaderText = "信用证单价";
-            dgvImport.Columns["priuserdefdecm1"].HeaderText = "总进价";
             dgvImport.Columns["priuserdefdecm2"].HeaderText = "费用单价";
+            dgvImport.Columns["priuserdefdecm3"].HeaderText = "初成本单价";
+            dgvImport.Columns["priuserdefdecm4"].HeaderText = "荒料初成本";
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
