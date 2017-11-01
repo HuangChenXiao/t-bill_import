@@ -1,0 +1,19 @@
+版本：12.2普及版
+账号：demo   DEMO
+
+查询语句：
+select AuxiliaryItems,summary,sum(origamountdr) as 借方 from GL_Entry
+where AuxiliaryItems='厦门大学学生公寓一期'
+group by AuxiliaryItems,summary
+
+
+
+说明：
+    查询条件：项目名称，取系统里面的项目表，要能选择的
+              时间：同时按时间查询
+              不输入条件就查询所有的
+
+
+
+第二张开发表：
+    参照销货单执行表，进货单执行表

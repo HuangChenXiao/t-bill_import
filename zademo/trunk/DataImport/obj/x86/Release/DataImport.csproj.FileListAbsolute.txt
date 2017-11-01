@@ -1,0 +1,7 @@
+C:\Documents and Settings\Administrator\桌面\精远\trunk\DataImport\bin\Release\DataImport.exe.config
+C:\Documents and Settings\Administrator\桌面\精远\trunk\DataImport\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\桌面\精远\trunk\DataImport\obj\x86\Release\DataImport.ExcelImport.resources
+C:\Documents and Settings\Administrator\桌面\精远\trunk\DataImport\obj\x86\Release\DataImport.LoginWin.resources
+C:\Documents and Settings\Administrator\桌面\精远\trunk\DataImport\obj\x86\Release\DataImport.Properties.Resources.resources
+C:\Documents and Settings\Administrator\桌面\精远\trunk\DataImport\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Documents and Settings\Administrator\桌面\精远\trunk\DataImport\obj\x86\Release\GenerateResource.write.1.tlog
