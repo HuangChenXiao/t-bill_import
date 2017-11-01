@@ -40,9 +40,10 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.dgvImport = new System.Windows.Forms.DataGridView();
             this.lbl_project = new System.Windows.Forms.Label();
-            this.cbx_project = new System.Windows.Forms.ComboBox();
             this.btn_serach = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txt_project = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvImport)).BeginInit();
             this.panel1.SuspendLayout();
@@ -136,17 +137,9 @@
             this.lbl_project.TabIndex = 5;
             this.lbl_project.Text = "项目名称:";
             // 
-            // cbx_project
-            // 
-            this.cbx_project.FormattingEnabled = true;
-            this.cbx_project.Location = new System.Drawing.Point(113, 5);
-            this.cbx_project.Name = "cbx_project";
-            this.cbx_project.Size = new System.Drawing.Size(121, 20);
-            this.cbx_project.TabIndex = 6;
-            // 
             // btn_serach
             // 
-            this.btn_serach.Location = new System.Drawing.Point(240, 3);
+            this.btn_serach.Location = new System.Drawing.Point(273, 5);
             this.btn_serach.Name = "btn_serach";
             this.btn_serach.Size = new System.Drawing.Size(75, 23);
             this.btn_serach.TabIndex = 7;
@@ -156,14 +149,33 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.txt_project);
             this.panel1.Controls.Add(this.dgvImport);
             this.panel1.Controls.Add(this.btn_serach);
-            this.panel1.Controls.Add(this.cbx_project);
             this.panel1.Controls.Add(this.lbl_project);
             this.panel1.Location = new System.Drawing.Point(139, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(755, 465);
             this.panel1.TabIndex = 8;
+            // 
+            // txt_project
+            // 
+            this.txt_project.Location = new System.Drawing.Point(114, 5);
+            this.txt_project.Name = "txt_project";
+            this.txt_project.ReadOnly = true;
+            this.txt_project.Size = new System.Drawing.Size(100, 21);
+            this.txt_project.TabIndex = 8;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(220, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(28, 23);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // ExcelImport
             // 
@@ -200,9 +212,10 @@
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.DataGridView dgvImport;
         private System.Windows.Forms.Label lbl_project;
-        private System.Windows.Forms.ComboBox cbx_project;
         private System.Windows.Forms.Button btn_serach;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox txt_project;
+        private System.Windows.Forms.Button button1;
     }
 }
 

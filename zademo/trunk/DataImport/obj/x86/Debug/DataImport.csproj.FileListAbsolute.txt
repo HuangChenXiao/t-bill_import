@@ -149,3 +149,4 @@ C:\Documents and Settings\Administrator\桌面\zademo\trunk\DataImport\obj\x86\D
 C:\Documents and Settings\Administrator\桌面\zademo\trunk\DataImport\bin\Debug\DataImport.exe
 C:\Documents and Settings\Administrator\桌面\zademo\trunk\DataImport\bin\Debug\DataImport.pdb
 C:\Documents and Settings\Administrator\桌面\zademo\trunk\DataImport\bin\Debug\DBHelper.dll
+C:\Documents and Settings\Administrator\桌面\zademo\trunk\DataImport\obj\x86\Debug\DataImport.Project_Frm.resources

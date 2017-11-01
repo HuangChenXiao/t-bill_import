@@ -32,30 +32,8 @@ namespace DataImport
 
         private void ExcelImport_Load(object sender, EventArgs e)
         {
-            bindCbox();
         }
-        public class aa_project
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
-        }
-        private void bindCbox()
-        {
-            IList<aa_project> infoList = new List<aa_project>();
-            DataTable dt = db.ExecuteSelect("select * from AA_Project").Tables[0];
-            aa_project info1 = new aa_project() { Id = "0", Name = "--请选择--" };
-            infoList.Add(info1);
-            foreach (DataRow item in dt.Rows)
-            {
-                info1 = new aa_project() { Id = item["id"].ToString(), Name = item["Name"].ToString() };
-                infoList.Add(info1);
-            }
-            this.cbx_project.DataSource = infoList;
-            this.cbx_project.ValueMember = "Id";
-            this.cbx_project.DisplayMember = "Name";
-            db.Close();
-            db.Dispose();
-        }
+
 
         private void dgvImport_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -89,10 +67,15 @@ namespace DataImport
         {
             string projectname = "";
 
-            if (Convert.ToInt32(this.cbx_project.SelectedIndex) > 0)
+            if (!string.IsNullOrEmpty(this.txt_project.Text))
             {
-                projectname = this.cbx_project.Text;
+                projectname = this.txt_project.Text;
             }
+            ProjectAmountInfo(projectname);
+        }
+
+        private void ProjectAmountInfo(string projectname)
+        {
             string sqlText = string.Format(@"select AuxiliaryItems,summary,sum(convert(float,origamountdr)) as amount from GL_Entry
                                 where (AuxiliaryItems like '%{0}%' or '{0}'='' and AuxiliaryItems is not null)
                                 group by AuxiliaryItems,summary", projectname);
@@ -148,7 +131,20 @@ namespace DataImport
             db.Dispose();
         }
 
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string where_name = "";
+            //Project_Frm pro = new Project_Frm(db, where_name);
+            //pro.ShowDialog();
+            using (Project_Frm pro = new Project_Frm(db, where_name))
+            {
+                if (pro.ShowDialog() == DialogResult.OK)
+                {
+                    this.txt_project.Text = pro.where_name;
+                    ProjectAmountInfo(pro.where_name);
+                }
+             }
+        }
 
     }
 }
