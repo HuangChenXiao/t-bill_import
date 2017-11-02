@@ -32,6 +32,11 @@ namespace DataImport
 
         private void ExcelImport_Load(object sender, EventArgs e)
         {
+            DateTime now = DateTime.Now;
+            DateTime d1 = new DateTime(now.Year, now.Month, 1);
+            DateTime d2 = d1.AddMonths(1).AddDays(-1);
+            this.start_Picker.Value = Convert.ToDateTime(d1.ToString("yyyy-MM-dd"));
+            this.end_Picker.Value = Convert.ToDateTime(d2.ToString("yyyy-MM-dd"));
         }
 
 
@@ -66,19 +71,41 @@ namespace DataImport
         private void btn_serach_Click(object sender, EventArgs e)
         {
             string projectname = "";
-
+            string start_date = "";
+            string end_date = "";
             if (!string.IsNullOrEmpty(this.txt_project.Text))
             {
                 projectname = this.txt_project.Text;
             }
+            if (!string.IsNullOrEmpty(this.start_Picker.Value.ToString()))
+            {
+                start_date = DateTime.Now.ToString("yyyy-MM-dd");
+            }
+            if (!string.IsNullOrEmpty(this.end_Picker.Value.ToString()))
+            {
+                end_date = DateTime.Now.ToString("yyyy-MM-dd");
+            }
+
             ProjectAmountInfo(projectname);
         }
 
         private void ProjectAmountInfo(string projectname)
         {
-            string sqlText = string.Format(@"select AuxiliaryItems,summary,sum(convert(float,origamountdr)) as amount from GL_Entry
-                                where (AuxiliaryItems like '%{0}%' or '{0}'='' and AuxiliaryItems is not null)
-                                group by AuxiliaryItems,summary", projectname);
+            string start_date = "";
+            string end_date = "";
+            if (!string.IsNullOrEmpty(this.start_Picker.Value.ToString()))
+            {
+                start_date = this.start_Picker.Value.ToString("yyyy-MM-dd");
+            }
+            if (!string.IsNullOrEmpty(this.end_Picker.Value.ToString()))
+            {
+                end_date = this.end_Picker.Value.ToString("yyyy-MM-dd");
+            }
+            string sqlText = string.Format(@"select b.AuxiliaryItems,b.summary,sum(convert(float,b.origamountdr)) as amount 
+                                            from GL_doc a inner join GL_Entry b on a.id=b.idDocDTO
+                                            where (b.AuxiliaryItems like '%{0}%' or '{0}'='' and b.AuxiliaryItems is not null)
+                                            and   (a.voucherdate>='{1}' and a.voucherdate<='{2}')
+                                            group by b.AuxiliaryItems,b.summary", projectname, start_date, end_date);
             DataTable dt = db.ExecuteSelect(sqlText).Tables[0];
             List<Report_GL_Entry_View> clist = new List<Report_GL_Entry_View>();
             Report_GL_Entry_View cl = new Report_GL_Entry_View();

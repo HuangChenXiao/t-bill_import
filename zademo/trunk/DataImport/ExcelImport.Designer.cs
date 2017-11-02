@@ -42,8 +42,12 @@
             this.lbl_project = new System.Windows.Forms.Label();
             this.btn_serach = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.txt_project = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.txt_project = new System.Windows.Forms.TextBox();
+            this.start_Picker = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.end_Picker = new System.Windows.Forms.DateTimePicker();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvImport)).BeginInit();
             this.panel1.SuspendLayout();
@@ -112,7 +116,7 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvImport.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvImport.Location = new System.Drawing.Point(6, 33);
+            this.dgvImport.Location = new System.Drawing.Point(6, 54);
             this.dgvImport.Name = "dgvImport";
             this.dgvImport.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -124,14 +128,14 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvImport.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvImport.RowTemplate.Height = 23;
-            this.dgvImport.Size = new System.Drawing.Size(742, 425);
+            this.dgvImport.Size = new System.Drawing.Size(742, 404);
             this.dgvImport.TabIndex = 1;
             this.dgvImport.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvImport_DataBindingComplete);
             // 
             // lbl_project
             // 
             this.lbl_project.AutoSize = true;
-            this.lbl_project.Location = new System.Drawing.Point(49, 10);
+            this.lbl_project.Location = new System.Drawing.Point(30, 23);
             this.lbl_project.Name = "lbl_project";
             this.lbl_project.Size = new System.Drawing.Size(59, 12);
             this.lbl_project.TabIndex = 5;
@@ -139,7 +143,7 @@
             // 
             // btn_serach
             // 
-            this.btn_serach.Location = new System.Drawing.Point(273, 5);
+            this.btn_serach.Location = new System.Drawing.Point(614, 16);
             this.btn_serach.Name = "btn_serach";
             this.btn_serach.Size = new System.Drawing.Size(75, 23);
             this.btn_serach.TabIndex = 7;
@@ -149,6 +153,10 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.end_Picker);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.start_Picker);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.txt_project);
             this.panel1.Controls.Add(this.dgvImport);
@@ -159,23 +167,56 @@
             this.panel1.Size = new System.Drawing.Size(755, 465);
             this.panel1.TabIndex = 8;
             // 
-            // txt_project
-            // 
-            this.txt_project.Location = new System.Drawing.Point(114, 5);
-            this.txt_project.Name = "txt_project";
-            this.txt_project.ReadOnly = true;
-            this.txt_project.Size = new System.Drawing.Size(100, 21);
-            this.txt_project.TabIndex = 8;
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(220, 5);
+            this.button1.Location = new System.Drawing.Point(201, 18);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(28, 23);
             this.button1.TabIndex = 9;
             this.button1.Text = "...";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // txt_project
+            // 
+            this.txt_project.Location = new System.Drawing.Point(95, 18);
+            this.txt_project.Name = "txt_project";
+            this.txt_project.Size = new System.Drawing.Size(100, 21);
+            this.txt_project.TabIndex = 8;
+            // 
+            // start_Picker
+            // 
+            this.start_Picker.Location = new System.Drawing.Point(325, 17);
+            this.start_Picker.Name = "start_Picker";
+            this.start_Picker.Size = new System.Drawing.Size(120, 21);
+            this.start_Picker.TabIndex = 10;
+            this.start_Picker.Value = new System.DateTime(2017, 11, 2, 0, 0, 0, 0);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(254, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 12);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "制单日期：";
+            // 
+            // end_Picker
+            // 
+            this.end_Picker.Location = new System.Drawing.Point(468, 17);
+            this.end_Picker.Name = "end_Picker";
+            this.end_Picker.Size = new System.Drawing.Size(120, 21);
+            this.end_Picker.TabIndex = 12;
+            this.end_Picker.Value = new System.DateTime(2017, 11, 2, 0, 0, 0, 0);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(451, 21);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(11, 12);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "-";
             // 
             // ExcelImport
             // 
@@ -216,6 +257,10 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox txt_project;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DateTimePicker start_Picker;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DateTimePicker end_Picker;
     }
 }
 
