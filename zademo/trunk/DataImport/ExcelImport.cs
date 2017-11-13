@@ -109,50 +109,64 @@ namespace DataImport
             DataTable dt = db.ExecuteSelect(sqlText).Tables[0];
             List<Report_GL_Entry_View> clist = new List<Report_GL_Entry_View>();
             Report_GL_Entry_View cl = new Report_GL_Entry_View();
+            var name = "";
             foreach (DataRow item in dt.Rows)
             {
                 string summary = item["summary"].ToString();
-                switch (summary)
+                if (string.IsNullOrEmpty(name))
                 {
-                    case "运费":
-                        cl.yunfei = item["amount"].ToString();
-                        break;
-                    case "施工费（人工）":
-                        cl.shigongfei = item["amount"].ToString();
-                        break;
-                    case "工资（人工）":
-                        cl.gongzi = item["amount"].ToString();
-                        break;
-                    case "业务招待费":
-                        cl.zhaodaifei = item["amount"].ToString();
-                        break;
-                    case "交通费":
-                        cl.jiaotongfei = item["amount"].ToString();
-                        break;
-                    case "信息费":
-                        cl.xinxinfei = item["amount"].ToString();
-                        break;
-                    case "管理费":
-                        cl.guanlifei = item["amount"].ToString();
-                        break;
-                    case "差旅费":
-                        cl.chailvfei = item["amount"].ToString();
-                        break;
-                    case "税金":
-                        cl.shuijin = item["amount"].ToString();
-                        break;
-                    case "设计费":
-                        cl.shejifei = item["amount"].ToString();
-                        break;
-                    case "项目费":
-                        cl.xiangmufei = item["amount"].ToString();
-                        break;
-                    case "其他":
-                        cl.qita = item["amount"].ToString();
-                        break;
+                    name = item["AuxiliaryItems"].ToString();
+                    cl.projectname = name;
+                    clist.Add(cl);
+                }
+                if (name == item["AuxiliaryItems"].ToString())
+                {
+                    switch (summary)
+                    {
+                        case "运费":
+                            cl.yunfei = item["amount"].ToString();
+                            break;
+                        case "施工费（人工）":
+                            cl.shigongfei = item["amount"].ToString();
+                            break;
+                        case "工资（人工）":
+                            cl.gongzi = item["amount"].ToString();
+                            break;
+                        case "业务招待费":
+                            cl.zhaodaifei = item["amount"].ToString();
+                            break;
+                        case "交通费":
+                            cl.jiaotongfei = item["amount"].ToString();
+                            break;
+                        case "信息费":
+                            cl.xinxinfei = item["amount"].ToString();
+                            break;
+                        case "管理费":
+                            cl.guanlifei = item["amount"].ToString();
+                            break;
+                        case "差旅费":
+                            cl.chailvfei = item["amount"].ToString();
+                            break;
+                        case "税金":
+                            cl.shuijin = item["amount"].ToString();
+                            break;
+                        case "设计费":
+                            cl.shejifei = item["amount"].ToString();
+                            break;
+                        case "项目费":
+                            cl.xiangmufei = item["amount"].ToString();
+                            break;
+                        case "其他":
+                            cl.qita = item["amount"].ToString();
+                            break;
+                    }
+                }
+                else {
+                    cl.projectname = name;
+                    clist.Add(cl);
+                    name = item["AuxiliaryItems"].ToString();
                 }
             }
-            clist.Add(cl);
             this.dgvImport.DataSource = clist;
             db.Close();
             db.Dispose();
@@ -170,7 +184,7 @@ namespace DataImport
                     this.txt_project.Text = pro.where_name;
                     ProjectAmountInfo(pro.where_name);
                 }
-             }
+            }
         }
 
     }
