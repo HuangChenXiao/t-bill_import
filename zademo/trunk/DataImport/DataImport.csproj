@@ -71,6 +71,7 @@
       <DependentUpon>LoginWin.cs</DependentUpon>
     </Compile>
     <Compile Include="model\Report_GL_Entry_View.cs" />
+    <Compile Include="model\Report_ProjectAmount.cs" />
     <Compile Include="model\Sync_Table_PurchaseOrder.cs" />
     <Compile Include="Order_b.cs" />
     <Compile Include="Program.cs" />

@@ -17,7 +17,7 @@ namespace DataImport
         public LoginWin()
         {
             InitializeComponent();
-            skinEngine1.SkinFile = "Skins/MacOS/MacOS.ssk";
+            skinEngine1.SkinFile = "Skins/Carlmness/Calmness.ssk";
             skinEngine1.SkinAllForm = true;//所有窗体均应用此皮肤
         }
 

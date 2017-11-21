@@ -26,7 +26,6 @@ namespace DataImport
             iEntity = entity;
             str = string.Format("server={0};database={1};uid={2};pwd={3}", entity.Server, entity.Database, entity.Uid, entity.Pwd, entity.AddUser);
             db = new DbOperate(str);
-            this.treeView1.ExpandAll();
         }
 
 
@@ -37,6 +36,8 @@ namespace DataImport
             DateTime d2 = d1.AddMonths(1).AddDays(-1);
             this.start_Picker.Value = Convert.ToDateTime(d1.ToString("yyyy-MM-dd"));
             this.end_Picker.Value = Convert.ToDateTime(d2.ToString("yyyy-MM-dd"));
+            this.start_hetong_date.Value = Convert.ToDateTime(d1.ToString("yyyy-MM-dd"));
+            this.end_hetong_date.Value = Convert.ToDateTime(d2.ToString("yyyy-MM-dd"));
         }
 
 
@@ -59,14 +60,6 @@ namespace DataImport
 
         }
 
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            var name = this.treeView1.SelectedNode.Name;
-            if (name == "aa_project")
-            {
-                this.dgvImport.Visible = true;
-            }
-        }
 
         private void btn_serach_Click(object sender, EventArgs e)
         {
@@ -186,6 +179,78 @@ namespace DataImport
                 }
             }
         }
+        private void ProjectAmountHeTong(string projectname)
+        {
+            string start_date = "";
+            string end_date = "";
+            if (!string.IsNullOrEmpty(this.start_hetong_date.Value.ToString()))
+            {
+                start_date = this.start_hetong_date.Value.ToString("yyyy-MM-dd");
+            }
+            if (!string.IsNullOrEmpty(this.end_hetong_date.Value.ToString()))
+            {
+                end_date = this.end_hetong_date.Value.ToString("yyyy-MM-dd");
+            }
+            string sqlText = string.Format(@"exec PROC_getProjectAmount '{0}','{1}','{2}'", projectname, start_date, end_date);
+            DataTable dt = db.ExecuteSelect(sqlText).Tables[0];
+            List<Report_ProjectAmount> clist = new List<Report_ProjectAmount>();
+            foreach (DataRow item in dt.Rows)
+            {
+                Report_ProjectAmount cl = new Report_ProjectAmount();
+                cl.name = item["name"].ToString();
+                cl.xinhetong = item["xinhetong"].ToString();
+                cl.buhetong = item["buhetong"].ToString();
+                cl.SAInvoicetaxAmount = item["SAInvoicetaxAmount"].ToString();
+                cl.SA_origSettleAmount = item["SA_origSettleAmount"].ToString();
+                cl.hetongAmount = item["hetongAmount"].ToString();
+                cl.CaiLiaoAmount = item["CaiLiaoAmount"].ToString();
+                cl.JieKuanAmount = item["JieKuanAmount"].ToString();
+                cl.PUInvoicetaxAmount = item["PUInvoicetaxAmount"].ToString();
+                cl.PU_Amount = item["PU_Amount"].ToString();
+                clist.Add(cl);
+            }
+            this.dataGridView1.DataSource = clist;
+            db.Close();
+            db.Dispose();
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string projectname = "";
+            if (!string.IsNullOrEmpty(this.txt_project_hetong.Text))
+            {
+                projectname = this.txt_project_hetong.Text;
+            }
+            ProjectAmountHeTong(projectname);
+        }
 
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            //设置显示的列名
+            dataGridView1.Columns["name"].HeaderText = "项目名称";
+            dataGridView1.Columns["xinhetong"].HeaderText = "新项目合同";
+            dataGridView1.Columns["buhetong"].HeaderText = "增补合同";
+            dataGridView1.Columns["SAInvoicetaxAmount"].HeaderText = "已开票金额";
+            dataGridView1.Columns["SA_origSettleAmount"].HeaderText = "收款";
+            dataGridView1.Columns["hetongAmount"].HeaderText = "应收金额";
+            dataGridView1.Columns["CaiLiaoAmount"].HeaderText = "材料成本";
+            dataGridView1.Columns["JieKuanAmount"].HeaderText = "付款";
+            dataGridView1.Columns["PUInvoicetaxAmount"].HeaderText = "到票金额";
+            dataGridView1.Columns["PU_Amount"].HeaderText = "应付金额";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string where_name = "";
+            //Project_Frm pro = new Project_Frm(db, where_name);
+            //pro.ShowDialog();
+            using (Project_Frm pro = new Project_Frm(db, where_name))
+            {
+                if (pro.ShowDialog() == DialogResult.OK)
+                {
+                    this.txt_project_hetong.Text = pro.where_name;
+                    ProjectAmountHeTong(pro.where_name);
+                }
+            }
+        }
     }
 }
