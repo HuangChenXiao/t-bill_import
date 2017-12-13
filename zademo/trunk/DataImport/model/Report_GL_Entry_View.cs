@@ -9,6 +9,7 @@ namespace DataImport.model
     {
         public string projectname { get; set; }
         public string yunfei { get; set; }
+        public string cailiao { get; set; }
         public string shigongfei { get; set; }
         public string gongzi { get; set; }
         public string zhaodaifei { get; set; }

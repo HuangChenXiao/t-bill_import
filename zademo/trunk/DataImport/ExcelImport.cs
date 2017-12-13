@@ -46,6 +46,7 @@ namespace DataImport
             //设置显示的列名
             dgvImport.Columns["projectname"].HeaderText = "项目名称";
             dgvImport.Columns["yunfei"].HeaderText = "运费";
+            dgvImport.Columns["cailiao"].HeaderText = "材料";
             dgvImport.Columns["shigongfei"].HeaderText = "施工费（人工）";
             dgvImport.Columns["gongzi"].HeaderText = "工资（人工）";
             dgvImport.Columns["zhaodaifei"].HeaderText = "业务招待费";
@@ -98,7 +99,8 @@ namespace DataImport
                                             from GL_doc a inner join GL_Entry b on a.id=b.idDocDTO
                                             where (b.AuxiliaryItems like '%{0}%' or '{0}'='' and b.AuxiliaryItems is not null)
                                             and   (a.voucherdate>='{1}' and a.voucherdate<='{2}')
-                                            group by b.AuxiliaryItems,b.summary", projectname, start_date, end_date);
+                                            group by b.AuxiliaryItems,b.summary
+                                            order by b.AuxiliaryItems desc", projectname, start_date, end_date);
             DataTable dt = db.ExecuteSelect(sqlText).Tables[0];
             List<Report_GL_Entry_View> clist = new List<Report_GL_Entry_View>();
             Report_GL_Entry_View cl = new Report_GL_Entry_View();
@@ -108,6 +110,7 @@ namespace DataImport
                 string summary = item["summary"].ToString();
                 if (string.IsNullOrEmpty(name))
                 {
+                    cl = new Report_GL_Entry_View();
                     name = item["AuxiliaryItems"].ToString();
                     cl.projectname = name;
                     clist.Add(cl);
@@ -118,6 +121,9 @@ namespace DataImport
                     {
                         case "运费":
                             cl.yunfei = item["amount"].ToString();
+                            break;
+                        case "材料":
+                            cl.cailiao = item["amount"].ToString();
                             break;
                         case "施工费（人工）":
                             cl.shigongfei = item["amount"].ToString();
@@ -154,8 +160,53 @@ namespace DataImport
                             break;
                     }
                 }
-                else {
+                else
+                {
+                    cl = new Report_GL_Entry_View();
+                    name = item["AuxiliaryItems"].ToString();
                     cl.projectname = name;
+                    switch (summary)
+                    {
+                        case "运费":
+                            cl.yunfei = item["amount"].ToString();
+                            break;
+                        case "材料":
+                            cl.cailiao = item["amount"].ToString();
+                            break;
+                        case "施工费（人工）":
+                            cl.shigongfei = item["amount"].ToString();
+                            break;
+                        case "工资（人工）":
+                            cl.gongzi = item["amount"].ToString();
+                            break;
+                        case "业务招待费":
+                            cl.zhaodaifei = item["amount"].ToString();
+                            break;
+                        case "交通费":
+                            cl.jiaotongfei = item["amount"].ToString();
+                            break;
+                        case "信息费":
+                            cl.xinxinfei = item["amount"].ToString();
+                            break;
+                        case "管理费":
+                            cl.guanlifei = item["amount"].ToString();
+                            break;
+                        case "差旅费":
+                            cl.chailvfei = item["amount"].ToString();
+                            break;
+                        case "税金":
+                            cl.shuijin = item["amount"].ToString();
+                            break;
+                        case "设计费":
+                            cl.shejifei = item["amount"].ToString();
+                            break;
+                        case "项目费":
+                            cl.xiangmufei = item["amount"].ToString();
+                            break;
+                        case "其他":
+                            cl.qita = item["amount"].ToString();
+                            break;
+                    }
                     clist.Add(cl);
                     name = item["AuxiliaryItems"].ToString();
                 }

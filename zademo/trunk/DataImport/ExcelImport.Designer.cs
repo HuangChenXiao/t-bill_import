@@ -150,7 +150,7 @@
             // 
             // btn_serach
             // 
-            this.btn_serach.Location = new System.Drawing.Point(614, 16);
+            this.btn_serach.Location = new System.Drawing.Point(594, 16);
             this.btn_serach.Name = "btn_serach";
             this.btn_serach.Size = new System.Drawing.Size(75, 23);
             this.btn_serach.TabIndex = 7;
