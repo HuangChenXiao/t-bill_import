@@ -99,6 +99,7 @@ namespace DataImport
                                             from GL_doc a inner join GL_Entry b on a.id=b.idDocDTO
                                             where (b.AuxiliaryItems like '%{0}%' or '{0}'='' and b.AuxiliaryItems is not null)
                                             and   (a.voucherdate>='{1}' and a.voucherdate<='{2}')
+                                            and b.summary in('运费','材料','施工费（人工）','工资（人工）','业务招待费','交通费','信息费','管理费','差旅费','税金','设计费','项目费','其他')
                                             group by b.AuxiliaryItems,b.summary
                                             order by b.AuxiliaryItems desc", projectname, start_date, end_date);
             DataTable dt = db.ExecuteSelect(sqlText).Tables[0];

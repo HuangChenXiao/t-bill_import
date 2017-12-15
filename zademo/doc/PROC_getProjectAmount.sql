@@ -15,8 +15,8 @@ ALTER PROCEDURE PROC_getProjectAmount
 AS
 BEGIN
 	SET NOCOUNT ON;
-	select name,isnull(xinhetong,0) as xinhetong,isnull(buhetong,0) as buhetong,sum(SAInvoicetaxAmount) as SAInvoicetaxAmount,
-		   SA_origSettleAmount as SA_origSettleAmount,isnull(xinhetong,0)+ isnull(buhetong,0) as hetongAmount,CaiLiaoAmount,
+	select name,isnull(xinhetong,0) as xinhetong,isnull(buhetong,0) as buhetong,sum(SAInvoicetaxAmount)+isnull(buhetong,0) as SAInvoicetaxAmount,
+		   SA_origSettleAmount+isnull(buhetong,0) as SA_origSettleAmount,isnull(xinhetong,0)+ isnull(buhetong,0) as hetongAmount,CaiLiaoAmount,
 		   JieKuanAmount,PUInvoicetaxAmount,PU_Amount
 	from (
 
