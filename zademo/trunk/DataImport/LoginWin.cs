@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using DBHelper.MSSQL;
 
 namespace DataImport
 {
@@ -29,9 +30,21 @@ namespace DataImport
             entity.Uid = this.Uidtbx.Text.Trim();
             entity.Pwd = this.Pwdtbx.Text.Trim();
             entity.AddUser = this.Addusertxt.Text.Trim();
-            Serialization();
-            ExcelImport import = new ExcelImport(entity);
-            import.ShowDialog();
+            string strconn = string.Format("server={0};database={1};uid={2};pwd={3}", entity.Server, entity.Database, entity.Uid, entity.Pwd, entity.AddUser);
+            DbOperate db = new DbOperate(strconn);
+            try
+            {
+                db.Open();
+                Serialization();
+                ExcelImport import = new ExcelImport(entity);
+                import.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.Close();
+
         }
 
         private void button2_Click(object sender, EventArgs e)
